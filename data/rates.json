@@ -1,0 +1,353 @@
+{
+ "_readme": "Maryland deed recordation and transfer tax rates. rec = recordation tax per $500 of price (rounded up to the next $500). lt = county transfer tax rate. Each county keeps a list of rate sets; the app uses the newest set whose 'effective' date is on or before the closing date. To change a rate, ADD a new set with its effective date instead of editing the old one.",
+ "reviewed": "2026-10-05",
+ "sources": [
+  {
+   "name": "Maryland Dept. of Legislative Services, County Revenue Outlook FY2026",
+   "url": "https://dls.maryland.gov/pubs/prod/InterGovMatters/LocFinTaxRte/County-Revenue-Outlook-Fiscal-2026.pdf"
+  },
+  {
+   "name": "Gordon Feinblatt, Recordation and Transfer Tax Rates in Maryland (as of Oct 1, 2025)",
+   "url": "https://www.gfrlaw.com/what-we-do/insights/recordation-and-transfer-tax-rates-maryland-explained"
+  },
+  {
+   "name": "Montgomery County MC311, County Transfer Tax rates",
+   "url": "https://www3.montgomerycountymd.gov/311/SolutionView.aspx?SolutionId=1-2IHFYY"
+  }
+ ],
+ "state": [
+  {
+   "effective": "2000-01-01",
+   "transfer": 0.005,
+   "fthbTransfer": 0.0025
+  }
+ ],
+ "counties": [
+  {
+   "id": "allegany",
+   "name": "Allegany",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 3.5,
+     "lt": 0.005,
+     "ooEx": 50000
+    }
+   ]
+  },
+  {
+   "id": "anne_arundel",
+   "name": "Anne Arundel",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 3.5,
+     "lt": 0.01,
+     "lt1m": 0.015
+    }
+   ]
+  },
+  {
+   "id": "baltimore_city",
+   "name": "Baltimore City",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 5.0,
+     "lt": 0.015,
+     "special": "bcity",
+     "ooRecEx": 22000,
+     "ooLtEx": 22000,
+     "ooLtExMaxPrice": 250000,
+     "yieldOver": 1000000,
+     "recYield": 1.15,
+     "ltOver1m": 0.021
+    }
+   ]
+  },
+  {
+   "id": "baltimore_co",
+   "name": "Baltimore County",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 2.5,
+     "lt": 0.015,
+     "ooEx": 22000
+    }
+   ]
+  },
+  {
+   "id": "calvert",
+   "name": "Calvert",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 5.0,
+     "lt": 0
+    }
+   ]
+  },
+  {
+   "id": "caroline",
+   "name": "Caroline",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 5.0,
+     "lt": 0.005,
+     "ooEx": 25000,
+     "fthbEx": 75000
+    }
+   ]
+  },
+  {
+   "id": "carroll",
+   "name": "Carroll",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 6.5,
+     "lt": 0
+    }
+   ]
+  },
+  {
+   "id": "cecil",
+   "name": "Cecil",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 4.1,
+     "lt": 0.005,
+     "fthbRate": 0.0025,
+     "fthbSeller": true
+    }
+   ]
+  },
+  {
+   "id": "charles",
+   "name": "Charles",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 7.0,
+     "lt": 0.005
+    }
+   ]
+  },
+  {
+   "id": "dorchester",
+   "name": "Dorchester",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 5.0,
+     "lt": 0.0075,
+     "ooEx": 30000
+    }
+   ]
+  },
+  {
+   "id": "frederick",
+   "name": "Frederick",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 7.0,
+     "lt": 0
+    }
+   ]
+  },
+  {
+   "id": "garrett",
+   "name": "Garrett",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 3.5,
+     "lt": 0.01,
+     "allEx": 50000
+    }
+   ]
+  },
+  {
+   "id": "harford",
+   "name": "Harford",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 3.3,
+     "lt": 0.01
+    }
+   ]
+  },
+  {
+   "id": "howard",
+   "name": "Howard",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 2.5,
+     "lt": 0.0125
+    }
+   ]
+  },
+  {
+   "id": "kent",
+   "name": "Kent",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 3.3,
+     "lt": 0.005
+    }
+   ]
+  },
+  {
+   "id": "montgomery",
+   "name": "Montgomery",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": null,
+     "lt": 0.01,
+     "special": "moco",
+     "recTiers": [
+      [
+       500000,
+       0.0089
+      ],
+      [
+       600000,
+       0.0135
+      ],
+      [
+       750000,
+       0.0204
+      ],
+      [
+       1000000,
+       0.02156
+      ],
+      [
+       null,
+       0.0227
+      ]
+     ],
+     "ooRecCredit": 890,
+     "ltTiers": [
+      [
+       40000,
+       0.0025
+      ],
+      [
+       70000,
+       0.005
+      ],
+      [
+       null,
+       0.01
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "prince_georges",
+   "name": "Prince George's",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 2.75,
+     "lt": 0.014
+    }
+   ]
+  },
+  {
+   "id": "queen_annes",
+   "name": "Queen Anne's",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 4.95,
+     "lt": 0.005,
+     "fthbRate": 0.0025,
+     "fthbSeller": true
+    }
+   ]
+  },
+  {
+   "id": "st_marys",
+   "name": "St. Mary's",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 4.0,
+     "lt": 0.01,
+     "ooEx": 30000
+    }
+   ]
+  },
+  {
+   "id": "somerset",
+   "name": "Somerset",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 3.3,
+     "lt": 0
+    }
+   ]
+  },
+  {
+   "id": "talbot",
+   "name": "Talbot",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 6.0,
+     "lt": 0.01,
+     "ooEx": 50000
+    }
+   ]
+  },
+  {
+   "id": "washington",
+   "name": "Washington",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 3.8,
+     "lt": 0.005,
+     "allEx": 50000,
+     "fthbRate": 0.0025,
+     "fthbMax": 115000
+    }
+   ]
+  },
+  {
+   "id": "wicomico",
+   "name": "Wicomico",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 3.5,
+     "lt": 0
+    }
+   ]
+  },
+  {
+   "id": "worcester",
+   "name": "Worcester",
+   "rates": [
+    {
+     "effective": "2025-07-01",
+     "rec": 3.3,
+     "lt": 0.005,
+     "ooEx": 50000
+    }
+   ]
+  }
+ ]
+}

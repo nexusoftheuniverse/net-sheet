@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Maryland Seller Net Sheet</title>
+<meta name="description" content="Estimate a Maryland seller's net proceeds with county transfer and recordation taxes.">
+<meta name="theme-color" content="#1f5f6b">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self'; script-src 'self'; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Net Sheet">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <img id="hdrPhoto" class="round" alt="" hidden>
+      <img id="hdrLogo" alt="" hidden>
+      <div>
+        <h1>Seller Net Sheet</h1>
+        <p id="hdrSub">Maryland · all 24 jurisdictions</p>
+      </div>
+    </div>
+    <div class="hdr-right">
+    <button class="btn" type="button" id="installBtn" hidden>Install app</button>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" id="tab-main" aria-selected="true" data-tab="main">Net sheet</button>
+      <button role="tab" id="tab-more" aria-selected="false" data-tab="more">More scenarios</button>
+      <button role="tab" id="tab-brand" aria-selected="false" data-tab="brand">Branding &amp; defaults</button>
+    </nav>
+    </div>
+  </header>
+
+  <p class="note" id="iosTip" hidden>To install on iPhone or iPad: tap the Share button in Safari, then <strong>Add to Home Screen</strong>.</p>
+  <p class="note err" id="loadErr" hidden>The tax rate table didn't load. Check the internet connection and reload. After the first visit, the app works offline.</p>
+  <div class="grid">
+    <div class="panel">
+      <!-- ===== MAIN TAB ===== -->
+      <section id="pane-main" class="panel">
+        <fieldset>
+          <legend>Property</legend>
+          <div class="row">
+            <div class="f"><label for="address">Property address</label><input type="text" id="address" placeholder="123 Main St, Centreville MD"></div>
+            <div class="f"><label for="seller">Seller name(s)</label><input type="text" id="seller" placeholder="Optional"></div>
+          </div>
+          <div class="u-mt12 row">
+            <div class="f"><label for="county">County</label><select id="county"></select><span class="hint" id="countyHint"></span></div>
+            <div class="f"><label for="closing">Estimated closing date</label><input type="date" id="closing"></div>
+          </div>
+          <div class="u-mt12 row">
+            <div class="f"><label for="price1">Sale price</label><div class="money"><input type="text" inputmode="decimal" id="price1"></div></div>
+            <div class="f"><label for="split">Transfer &amp; recordation taxes paid by</label>
+              <select id="split">
+                <option value="50">Split 50/50</option>
+                <option value="100">Seller pays all</option>
+                <option value="0">Buyer pays all</option>
+                <option value="custom">Custom split</option>
+              </select>
+            </div>
+          </div>
+          <div class="u-mt12 row" id="customSplitRow" hidden>
+            <div class="f"><label for="splitPct">Seller's share of taxes</label><div class="pct"><input type="number" id="splitPct" min="0" max="100" step="1" value="50"></div></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Buyer</legend>
+          <label class="check"><input type="checkbox" id="fthb"><span>First-time Maryland homebuyer<small>State transfer tax drops to 0.25% and the seller must pay it. Some counties also reduce their tax.</small></span></label>
+          <label class="check"><input type="checkbox" id="owner"><span>Buyer will live in the home<small>Unlocks owner-occupant exemptions in counties that have them.</small></span></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Commission &amp; admin fee</legend>
+          <div class="row three">
+            <div class="f"><label for="listPct">Listing commission</label><div class="pct"><input type="number" id="listPct" step="0.01" min="0"></div></div>
+            <div class="f"><label for="buyPct">Buyer agent commission</label><div class="pct"><input type="number" id="buyPct" step="0.01" min="0"></div></div>
+            <div class="f"><label for="adminFee">Admin fee</label><div class="money"><input type="text" inputmode="decimal" id="adminFee"></div><span class="hint">Charged on every sale. Update it here if it changes.</span></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Optional seller costs</legend>
+          <div class="row three">
+            <div class="f"><label for="conc">Seller concessions</label>
+              <div class="combo"><input type="text" inputmode="decimal" id="conc" placeholder="0">
+                <div class="seg" role="group" aria-label="Concession type"><button type="button" id="concD" aria-pressed="true">$</button><button type="button" id="concP" aria-pressed="false">%</button></div>
+              </div>
+              <span class="hint" id="concHint">Dollar amount</span>
+            </div>
+            <div class="f"><label for="warranty">Home warranty</label><div class="money"><input type="text" inputmode="decimal" id="warranty" placeholder="Optional"></div></div>
+            <div class="f"><label for="hoaDues">HOA / condo fees</label><div class="money"><input type="text" inputmode="decimal" id="hoaDues" placeholder="Optional"></div></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Payoff &amp; property taxes</legend>
+          <div class="row">
+            <div class="f"><label for="loan1">First mortgage payoff</label><div class="money"><input type="text" inputmode="decimal" id="loan1"></div></div>
+            <div class="f"><label for="annualTax">Annual property tax <span class="u-normal">(optional)</span></label><div class="money"><input type="text" inputmode="decimal" id="annualTax" placeholder="Leave blank to skip"></div></div>
+          </div>
+          <div class="u-mt12 row">
+            <div class="f"><label for="taxStatus">This tax year's bill (July 1 – June 30)</label>
+              <select id="taxStatus">
+                <option value="paid">Paid in full by seller</option>
+                <option value="half">First half paid (semiannual)</option>
+                <option value="unpaid">Not paid yet</option>
+              </select>
+            </div>
+            <div class="f"><label>Proration</label><div class="u-pt8 hint" id="prorHint">Enter the annual tax to calculate.</div></div>
+          </div>
+
+          <details id="feesBox">
+            <summary>Title &amp; closing fees (optional)</summary>
+            <div class="row three">
+              <div class="f"><label for="feeSettle">Settlement / closing fee</label><div class="money"><input type="text" inputmode="decimal" id="feeSettle"></div></div>
+              <div class="f"><label for="feeWire">Wire fee</label><div class="money"><input type="text" inputmode="decimal" id="feeWire"></div></div>
+              <div class="f"><label for="feeCourier">Courier fee</label><div class="money"><input type="text" inputmode="decimal" id="feeCourier"></div></div>
+              <div class="f"><label for="feePayoff">Payoff processing fee</label><div class="money"><input type="text" inputmode="decimal" id="feePayoff"></div></div>
+              <div class="f"><label for="feeDoc">Document preparation</label><div class="money"><input type="text" inputmode="decimal" id="feeDoc"></div></div>
+              <div class="f"><label for="feeRelease">Release tracking fee</label><div class="money"><input type="text" inputmode="decimal" id="feeRelease"></div></div>
+            </div>
+            <p class="note">Blank fields count as $0. Save your title company's usual numbers on the <strong>Branding &amp; defaults</strong> tab so every new sheet starts with them.</p>
+          </details>
+        </fieldset>
+        <div class="btns">
+          <button class="btn" type="button" id="newSheet">Start a new sheet</button>
+          <button class="btn" type="button" id="loadExample">Load example</button>
+        </div>
+      </section>
+
+      <!-- ===== MORE TAB ===== -->
+      <section id="pane-more" class="panel" hidden>
+        <fieldset>
+          <legend>Compare sale prices</legend>
+          <div class="row">
+            <div class="f"><label for="price2">Second price</label><div class="money"><input type="text" inputmode="decimal" id="price2" placeholder="Optional"></div></div>
+            <div class="f"><label for="price3">Third price</label><div class="money"><input type="text" inputmode="decimal" id="price3" placeholder="Optional"></div></div>
+          </div>
+          <p class="note">Each price gets its own column on the sheet and the PDF. Commissions, percentage concessions and taxes recalculate for each price.</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Commission extras</legend>
+          <div class="u-one row">
+            <div class="f"><label for="flatComm">Flat commission</label><div class="money"><input type="text" inputmode="decimal" id="flatComm" placeholder="Optional"></div><span class="hint">Use instead of, or on top of, a percentage.</span></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Other loans &amp; liens</legend>
+          <div class="row three">
+            <div class="f"><label for="loan2">Second loan</label><div class="money"><input type="text" inputmode="decimal" id="loan2"></div></div>
+            <div class="f"><label for="heloc">HELOC</label><div class="money"><input type="text" inputmode="decimal" id="heloc"></div></div>
+            <div class="f"><label for="liens">Other liens / judgments</label><div class="money"><input type="text" inputmode="decimal" id="liens"></div></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Other HOA &amp; property costs</legend>
+          <div class="row three">
+            <div class="f"><label for="hoaPkg">Resale package / transfer fee</label><div class="money"><input type="text" inputmode="decimal" id="hoaPkg"></div></div>
+            <div class="f"><label for="assess">Special assessments</label><div class="money"><input type="text" inputmode="decimal" id="assess"></div></div>
+            <div class="f"><label for="water">Water / sewer escrow</label><div class="money"><input type="text" inputmode="decimal" id="water"></div></div>
+            <div class="f"><label for="termite">Termite inspection / treatment</label><div class="money"><input type="text" inputmode="decimal" id="termite"></div></div>
+            <div class="f"><label for="repairs">Repair credit to buyer</label><div class="money"><input type="text" inputmode="decimal" id="repairs"></div></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Other fees or credits</legend>
+          <div class="row">
+            <div class="f"><label for="o1Label">Description</label><input type="text" id="o1Label" placeholder="e.g. Septic inspection"></div>
+            <div class="f"><label for="o1Amt">Amount</label><div class="money"><input type="text" inputmode="decimal" id="o1Amt"></div></div>
+            <div class="f"><label for="o2Label">Description</label><input type="text" id="o2Label" placeholder="e.g. Rent-back credit"></div>
+            <div class="f"><label for="o2Amt">Amount</label><div class="money"><input type="text" inputmode="decimal" id="o2Amt"></div></div>
+          </div>
+          <p class="note">Enter a cost as a positive number. Enter a credit to the seller with a minus sign, like −1500.</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Short sale</legend>
+          <label class="check"><input type="checkbox" id="shortSale"><span>This is a short sale<small>The sheet shows the shortfall the lender would need to approve instead of seller proceeds.</small></span></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Override county tax rates</legend>
+          <div class="row">
+            <div class="f"><label for="ovRec">Recordation tax per $500</label><div class="money"><input type="text" inputmode="decimal" id="ovRec" placeholder="County default"></div></div>
+            <div class="f"><label for="ovLocal">County transfer tax</label><div class="pct"><input type="number" step="0.01" id="ovLocal" placeholder="County default"></div></div>
+          </div>
+          <p class="note" id="rateNote"></p>
+        </fieldset>
+      </section>
+
+      <!-- ===== BRAND TAB ===== -->
+      <section id="pane-brand" class="panel" hidden>
+        <fieldset>
+          <legend>Your details on the PDF</legend>
+          <div class="row">
+            <div class="f"><label for="bName">Agent name</label><input type="text" id="bName"></div>
+            <div class="f"><label for="bTitle">Title</label><input type="text" id="bTitle" placeholder="REALTOR®"></div>
+            <div class="f"><label for="bBroker">Brokerage</label><input type="text" id="bBroker"></div>
+            <div class="f"><label for="bLicense">License #</label><input type="text" id="bLicense"></div>
+            <div class="f"><label for="bPhone">Phone</label><input type="tel" id="bPhone"></div>
+            <div class="f"><label for="bEmail">Email</label><input type="email" id="bEmail"></div>
+            <div class="f"><label for="bWeb">Website</label><input type="text" id="bWeb"></div>
+            <div class="f"><label for="bColor">PDF accent color</label><input type="color" id="bColor" class="swatch" value="#1f5f6b"></div>
+          </div>
+          <div class="u-mt12 row">
+            <div class="f"><label for="bPhoto">Agent photo</label>
+              <div class="logo-prev"><img id="photoPrev" class="round big" alt="Photo preview" hidden><input type="file" id="bPhoto" accept="image/png,image/jpeg,image/webp"><button type="button" class="btn" id="photoClear" hidden>Remove</button></div>
+              <div class="crop" id="cropBox" hidden>
+                <label for="cropZ">Zoom</label><input type="range" id="cropZ" min="100" max="300" step="1" value="100">
+                <label for="cropY">Move up / down</label><input type="range" id="cropY" min="0" max="100" step="1" value="15">
+                <label for="cropX">Move left / right</label><input type="range" id="cropX" min="0" max="100" step="1" value="50">
+              </div>
+              <span class="hint">Use the sliders until her whole face fits in the circle. Shows top left on the PDF.</span>
+            </div>
+            <div class="f"><label for="bLogo">Brokerage logo</label>
+              <div class="logo-prev"><img id="logoPrev" alt="Logo preview" hidden><input type="file" id="bLogo" accept="image/png,image/jpeg,image/webp"><button type="button" class="btn" id="logoClear" hidden>Remove</button></div>
+              <span class="hint">Shows top right on the PDF. A wide logo on a white background works best.</span>
+            </div>
+          </div>
+          <div class="u-mt12 f"><label for="bDisc">Disclaimer on the PDF</label>
+            <input type="text" id="bDisc">
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Defaults for new sheets</legend>
+          <p class="u-mt0 note">Saves the current county, tax split, commissions and title &amp; closing fees. "Start a new sheet" will begin with these.</p>
+          <div class="u-mt12 btns">
+            <button class="btn primary" type="button" id="saveBrand">Save branding &amp; defaults</button>
+          </div>
+          <p class="status" id="brandStatus"></p>
+          <p class="note">Saved in this browser on this device only. Set it up once on each phone or computer she uses.</p>
+        </fieldset>
+      </section>
+    </div>
+
+    <!-- ===== RESULTS ===== -->
+    <aside class="sheet" aria-live="polite">
+      <div class="sheet-head">
+        <div class="eyebrow" id="netLabel">Estimated net seller proceeds</div>
+        <div class="net" id="netBig">$0.00</div>
+        <div class="sub" id="netSub"></div>
+        <span class="example" id="exampleTag" hidden>Example figures</span>
+      </div>
+      <div class="tbl-wrap"><table class="lines" id="lines"></table></div>
+      <div class="foot">
+        <div class="btns"><button class="btn primary" type="button" id="pdfBtn">Create PDF</button><a class="btn" id="pdfOpen" target="_blank" rel="noopener" hidden>Open PDF</a></div>
+        <p class="status" id="pdfStatus"></p>
+        <p class="disc" id="discOut"></p>
+        <p class="disc" id="ratesAsOf"></p>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<div class="mbar"><div><div class="l" id="mLabel">Est. net proceeds</div><div class="v" id="mNet">$0.00</div></div><button class="btn primary" type="button" id="pdfBtn2">Create PDF</button></div>
+
+<script src="js/calc.js"></script>
+<script src="js/minipdf.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
